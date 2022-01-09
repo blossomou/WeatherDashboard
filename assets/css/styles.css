@@ -1,0 +1,33 @@
+.hide {
+  display: none;
+}
+
+.cityTitle {
+  font-size: 3em;
+  font-weight: 900;
+}
+
+.cityTemperature {
+  font-size: x-large;
+}
+
+.weatherIcon {
+  width: 100;
+  height: 100;
+}
+
+.cityDateWeather {
+  display: flex;
+  align-items: center;
+}
+
+.forecast {
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  margin-right: 20px;
+  padding: 10px;
+  color: white;
+  /* background-color: #a16c6c; */
+  background-image: linear-gradient(to right, lightpink, #a16c6c);
+}

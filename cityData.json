@@ -1,0 +1,43 @@
+[
+    {
+        "name": "Cleveland",
+        "local_names": {
+            "en": "Cleveland",
+            "oc": "Cleveland",
+            "ru": "Кливленд",
+            "ar": "كليفلاند"
+        },
+        "lat": 41.5051613,
+        "lon": -81.6934446,
+        "country": "US",
+        "state": "Ohio"
+    },
+    {
+        "name": "Cleveland",
+        "lat": 33.7440023,
+        "lon": -90.7248187,
+        "country": "US",
+        "state": "Mississippi"
+    },
+    {
+        "name": "Cleveland",
+        "lat": 35.1595182,
+        "lon": -84.8766115,
+        "country": "US",
+        "state": "Tennessee"
+    },
+    {
+        "name": "Cleveland",
+        "lat": 30.3414794,
+        "lon": -95.0900115,
+        "country": "US",
+        "state": "Texas"
+    },
+    {
+        "name": "Cleveland",
+        "lat": 41.5061454,
+        "lon": -90.3148479,
+        "country": "US",
+        "state": "Illinois"
+    }
+]
