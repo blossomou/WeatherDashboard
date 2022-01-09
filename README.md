@@ -3,12 +3,14 @@
 ## Purpose
 
 A website that retrieves temperature from any city
+I want to learn more about HTML, CSS, Javascript and JQuery
 
 ## Built With
 
 - HTML
 - CSS
 - Javascript
+- JQuery
 
 ## Website
 
