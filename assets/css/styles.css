@@ -15,7 +15,7 @@ html * {
 }
 
 .bigFont {
-  font-size: 3em;
+  font-size: 3rem;
   font-weight: 900;
 }
 
@@ -34,13 +34,7 @@ html * {
 }
 
 .forecastDiv {
-  border-width: 1px;
-  border-color: black;
-  border-style: solid;
-  margin-right: 20px;
-  padding: 10px;
   color: white;
-  /* background-color: #a16c6c; */
   background-image: linear-gradient(to right, lightpink, #a16c6c);
 }
 
@@ -49,14 +43,16 @@ html * {
   border-style: solid;
   border-width: 1.5px;
   margin-top: 10px;
+  background-color: lightpink;
+  border-color: lightpink;
 }
 
-.dashboardStyle {
-  border-color: rgb(240, 103, 123);
-  border-width: 2px;
+.baseBoxBorder {
+  border-width: 1.5px;
+  border-color: rgb(250, 85, 110);
   border-style: solid;
+  margin-right: 20px;
   padding: 10px;
-  font-size: 1.5em;
 }
 
 button {
@@ -65,16 +61,18 @@ button {
   margin-top: 10px;
   border-radius: 10px;
   color: white;
-  font-size: 1.5em;
+  font-size: 1.5rem;
 }
 
 button:hover {
   background-color: rgb(196, 183, 185);
   cursor: pointer;
 }
+
 .grayButton {
   background-color: rgb(196, 183, 185);
 }
+
 input {
   border-radius: 10px;
   padding: 1rem;
@@ -93,13 +91,9 @@ input {
 }
 
 .mainContainer {
-  border-color: black;
+  /* border-color: black;
   border-width: 1px;
-  border-style: dotted;
+  border-style: dotted; */
   display: flex;
   margin-top: 10px;
-}
-
-.no_padding {
-  padding: 0;
 }

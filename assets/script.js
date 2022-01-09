@@ -2,7 +2,7 @@ const baseURL = 'https://api.openweathermap.org';
 const apiKey = 'dc2556c07508f18009a5420cc2296743';
 
 const choicesEl = document.getElementById('choices');
-const searchCityChoicesEl = document.getElementById('searchChoices');
+const searchCityChoicesEl = document.getElementById('searchCityChoices');
 
 const dashboardContainerEl = document.getElementById('dashboardContainer');
 const dashboardEl = document.getElementById('dashboard');
@@ -10,13 +10,12 @@ const dailyForecastContainerEl = document.getElementById('dailyForecastContainer
 const dailyForecastEl = document.getElementById('dailyForecast');
 const getCitiesFromLocalStorageEl = document.getElementById('getCitiesFromLocalStorage');
 
-const listOfCities = [];
-
+resetAllElements();
 getCityFromLocalStorage();
 
-let searchBtn = document.getElementById('btnSearch');
+let searchBtn = document.getElementById('btnSearch').addEventListener('click', searchCity);
 
-searchBtn.addEventListener('click', searchCity);
+//searchBtn.addEventListener('click', searchCity);
 
 function searchCity() {
   let txtInput = document.getElementById('txtInput').value;
@@ -24,9 +23,9 @@ function searchCity() {
   if (txtInput === '') {
     return;
   }
+  searchCityChoicesEl.textContent = ''; //clear old stuff out
 
   document.getElementById('txtInput').value = '';
-  searchCityChoicesEl.textContent = ''; //clear old stuff out
 
   fetch(`${baseURL}/geo/1.0/direct?q=${txtInput}&limit=5&appid=${apiKey}`)
     .then((response) => {
@@ -35,12 +34,14 @@ function searchCity() {
           if (data.length > 0) {
             choicesEl.removeAttribute('class');
             for (let i = 0; i < data.length; i++) {
-              listOfCities.push(data[i]);
-              let city = document.createElement('p');
+              // let city = document.createElement('p');
+
+              let city = createElement('button', 'class', 'button');
               let cityObject = data[i];
               city.textContent = `${data[i].name}, ${data[i].state}`;
 
               city.addEventListener('click', function () {
+                resetAllElements();
                 selectCity(cityObject);
                 storeSelectedCityToLocalStorage(cityObject);
               });
@@ -74,7 +75,7 @@ function storeSelectedCityToLocalStorage(cityObject) {
 }
 
 function getCityFromLocalStorage() {
-  getCitiesFromLocalStorageEl.textContent = '';
+  getCitiesFromLocalStorageEl.textContent = ''; //clear old stuff out
 
   var getCities = JSON.parse(window.localStorage.getItem('cities')) || [];
 
@@ -89,6 +90,7 @@ function getCityFromLocalStorage() {
       button.textContent = `${getCities[i].name}, ${getCities[i].state}`;
 
       button.addEventListener('click', function () {
+        resetAllElements();
         selectCity(getCities[i]);
       });
 
@@ -98,9 +100,7 @@ function getCityFromLocalStorage() {
 }
 
 function selectCity(cityObject) {
-  choicesEl.setAttribute('class', 'hide');
   dashboardContainerEl.removeAttribute('class');
-  dashboardEl.textContent = ''; //Clear out the old content
 
   fetch(`${baseURL}/data/2.5/onecall?lat=${cityObject.lat}&lon=${cityObject.lon}&limit=5&appid=${apiKey}&units=imperial`)
     .then((response) => {
@@ -108,8 +108,7 @@ function selectCity(cityObject) {
         response.json().then((data) => {
           if (Object.keys(data).length > 0) {
             let today = formatUnixTimeStamp(data.current.dt);
-
-            let cityDateDisplayDiv = createElement('div', 'class', 'cityDateWeather'); //document.createElement('div');
+            let cityDateDisplayDiv = createElement('div', 'class', 'cityDateWeather');
 
             let weatherIcon = getWeatherIcon(data.current.weather[0].icon);
 
@@ -136,18 +135,12 @@ function selectCity(cityObject) {
     .catch((error) => console.log(error));
 }
 
-function formatUnixTimeStamp(unixTime) {
-  const date = new Date(unixTime * 1000);
-  return date.toLocaleDateString('en-US');
-}
-
 function getNextFiveDayForecast(listOfDailyObject) {
   let listOfDailyObj = listOfDailyObject.slice(1, 6); //Get the next friday and exclude today's
   dailyForecastContainerEl.removeAttribute('class');
-  dailyForecastEl.textContent = ''; //Clear out the old content
 
   for (let i = 0; i < listOfDailyObj.length; i++) {
-    let individualDayDiv = createElement('div', 'class', 'forecastDiv');
+    let individualDayDiv = createElement('div', 'class', 'forecastDiv baseBoxBorder');
 
     let forecastDate = formatUnixTimeStamp(listOfDailyObj[i].dt);
 
@@ -164,8 +157,7 @@ function getNextFiveDayForecast(listOfDailyObject) {
 }
 
 function getWeatherIcon(icon) {
-  let weatherIcon = document.createElement('img');
-  weatherIcon.setAttribute('class', 'weatherIcon');
+  let weatherIcon = createElement('img', 'class', 'weatherIcon');
   weatherIcon.setAttribute('src', `https://openweathermap.org/img/wn/${icon}.png`);
 
   return weatherIcon;
@@ -188,4 +180,17 @@ function createElement(element, name, style) {
   createDiv.setAttribute(name, style);
 
   return createDiv;
+}
+
+function formatUnixTimeStamp(unixTime) {
+  const date = new Date(unixTime * 1000);
+  return date.toLocaleDateString('en-US');
+}
+
+function resetAllElements() {
+  choicesEl.setAttribute('class', 'hide');
+  dashboardContainerEl.setAttribute('class', 'hide');
+  dailyForecastContainerEl.setAttribute('class', 'hide');
+  dashboardEl.textContent = ''; //Clear out the old content
+  dailyForecastEl.textContent = ''; //Clear out the old content
 }
