@@ -68,6 +68,13 @@ button {
   font-size: 1.5em;
 }
 
+button:hover {
+  background-color: rgb(196, 183, 185);
+  cursor: pointer;
+}
+.grayButton {
+  background-color: rgb(196, 183, 185);
+}
 input {
   border-radius: 10px;
   padding: 1rem;

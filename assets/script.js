@@ -8,24 +8,26 @@ const dashboardContainerEl = document.getElementById('dashboardContainer');
 const dashboardEl = document.getElementById('dashboard');
 const dailyForecastContainerEl = document.getElementById('dailyForecastContainer');
 const dailyForecastEl = document.getElementById('dailyForecast');
+const getCitiesFromLocalStorageEl = document.getElementById('getCitiesFromLocalStorage');
 
 const listOfCities = [];
 
-//geo location
-//https://api.openweathermap.org/geo/1.0/direct?q=Cleveland&limit=5&appid=dc2556c07508f18009a5420cc2296743
-
-//forecast api
-//https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&appid=dc2556c07508f18009a5420cc2296743&units=imperial
+getCityFromLocalStorage();
 
 let searchBtn = document.getElementById('btnSearch');
 
 searchBtn.addEventListener('click', searchCity);
 
 function searchCity() {
-  // alert("you click the search btn");
-  let txtInput = 'Cleveland'; //document.getElementById("txtInput").value;
+  let txtInput = document.getElementById('txtInput').value;
 
+  if (txtInput === '') {
+    return;
+  }
+
+  document.getElementById('txtInput').value = '';
   searchCityChoicesEl.textContent = ''; //clear old stuff out
+
   fetch(`${baseURL}/geo/1.0/direct?q=${txtInput}&limit=5&appid=${apiKey}`)
     .then((res) => {
       if (res.ok) {
@@ -41,7 +43,9 @@ function searchCity() {
 
               city.addEventListener('click', function () {
                 selectCity(cityObject);
+                storeSelectedCityToLocalStorage(cityObject);
               });
+
               searchCityChoicesEl.appendChild(city);
             }
           }
@@ -53,7 +57,50 @@ function searchCity() {
     .catch((error) => console.log(error));
 }
 
+function storeSelectedCityToLocalStorage(cityObject) {
+  var cities = JSON.parse(window.localStorage.getItem('cities')) || [];
+
+  let foundCity = cities.find((c) => c.city.name === cityObject.name && c.city.state === cityObject.state);
+
+  if (!foundCity) {
+    // save to localstorage
+    var newCity = {
+      city: cityObject,
+      dateCreated: new Date(),
+    };
+    cities.push(newCity);
+  }
+
+  window.localStorage.setItem('cities', JSON.stringify(cities));
+  getCityFromLocalStorage();
+}
+
+function getCityFromLocalStorage() {
+  getCitiesFromLocalStorageEl.textContent = '';
+
+  var getCities = JSON.parse(window.localStorage.getItem('cities')) || [];
+
+  getCities.sort(function (a, b) {
+    return new Date(b.dateCreated) - new Date(a.dateCreated);
+  });
+
+  if (getCities.length > 0) {
+    for (let i = 0; i < getCities.length; i++) {
+      let button = createElement('button', 'class', 'button');
+      button.setAttribute('class', 'grayButton');
+      button.textContent = `${getCities[i].city.name}, ${getCities[i].city.state}`;
+
+      button.addEventListener('click', function () {
+        selectCity(getCities[i]);
+      });
+
+      getCitiesFromLocalStorageEl.append(button);
+    }
+  }
+}
+
 function selectCity(cityObject) {
+  choicesEl.setAttribute('class', 'hide');
   dashboardContainerEl.removeAttribute('class');
   dashboardEl.textContent = ''; //Clear out the old content
 
@@ -65,7 +112,7 @@ function selectCity(cityObject) {
           if (Object.keys(data).length > 0) {
             let today = formatUnixTimeStamp(data.current.dt);
 
-            let cityDateDisplayDiv = createDivElement('class', 'cityDateWeather'); //document.createElement('div');
+            let cityDateDisplayDiv = createElement('div', 'class', 'cityDateWeather'); //document.createElement('div');
 
             let weatherIcon = getWeatherIcon(data.current.weather[0].icon);
 
@@ -103,7 +150,7 @@ function getNextFiveDayForecast(listOfDailyObject) {
   dailyForecastEl.textContent = ''; //Clear out the old content
 
   for (let i = 0; i < listOfDailyObj.length; i++) {
-    let individualDayDiv = createDivElement('class', 'forecastDiv');
+    let individualDayDiv = createElement('div', 'class', 'forecastDiv');
 
     let forecastDate = formatUnixTimeStamp(listOfDailyObj[i].dt);
 
@@ -139,8 +186,8 @@ function contentDisplay(title, value, suffix) {
   return textDisplay;
 }
 
-function createDivElement(name, style) {
-  let createDiv = document.createElement('div');
+function createElement(element, name, style) {
+  let createDiv = document.createElement(element);
   createDiv.setAttribute(name, style);
 
   return createDiv;
