@@ -123,7 +123,16 @@ function selectCity(cityObject) {
             cityDateDisplayDiv.append(cityDisplay, weatherIcon);
 
             dashboardEl.append(cityDateDisplayDiv, tempDisplay, windDisplay, humidityDisplay, uvIndexDisplay);
+            //$('#dashboardContainer').fadeIn(1000, 'linear');
             dashboardContainerEl.removeAttribute('class');
+
+            //for small screen animation
+            $('html, body').animate(
+              {
+                scrollTop: $('#dashboardContainer').offset().top,
+              },
+              2000,
+            );
 
             getNextFiveDayForecast(data.daily);
           }
@@ -137,7 +146,6 @@ function selectCity(cityObject) {
 
 function getNextFiveDayForecast(listOfDailyObject) {
   let listOfDailyObj = listOfDailyObject.slice(1, 6); //Get the next friday and exclude today's
-  dailyForecastContainerEl.removeAttribute('class');
 
   for (let i = 0; i < listOfDailyObj.length; i++) {
     let individualDayDiv = createElement('div', 'class', 'forecastDiv baseBoxBorder');
@@ -151,6 +159,8 @@ function getNextFiveDayForecast(listOfDailyObject) {
     let humidityDisplay = contentDisplay('Humidity', `${listOfDailyObj[i].humidity}`, '%');
 
     individualDayDiv.append(dateDisplay, weatherIconDisplay, tempDisplay, windDisplay, humidityDisplay);
+    //$('#dailyForecastContainer').fadeIn(1000, 'linear');
+    dailyForecastContainerEl.removeAttribute('class');
 
     dailyForecastEl.appendChild(individualDayDiv);
   }

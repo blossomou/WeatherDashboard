@@ -9,7 +9,7 @@ html * {
 .title {
   display: flex;
   justify-content: center;
-  background-image: linear-gradient(to right, lightpink, rgb(73, 2, 73));
+  background-image: linear-gradient(to right, lightpink, rgb(133, 87, 133));
   font-size: 3em;
   color: white;
 }
@@ -17,6 +17,7 @@ html * {
 .bigFont {
   font-size: 3rem;
   font-weight: 900;
+  color: rgb(250, 85, 110);
 }
 
 .mediumFont {
@@ -114,7 +115,7 @@ input {
   }
 
   .rightContainer {
-    margin-top: 20px;
+    margin-top: 25px;
     width: auto;
   }
 }
