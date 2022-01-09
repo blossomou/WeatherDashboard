@@ -100,8 +100,6 @@ function getCityFromLocalStorage() {
 }
 
 function selectCity(cityObject) {
-  dashboardContainerEl.removeAttribute('class');
-
   fetch(`${baseURL}/data/2.5/onecall?lat=${cityObject.lat}&lon=${cityObject.lon}&limit=5&appid=${apiKey}&units=imperial`)
     .then((response) => {
       if (response.ok) {
@@ -125,6 +123,8 @@ function selectCity(cityObject) {
             cityDateDisplayDiv.append(cityDisplay, weatherIcon);
 
             dashboardEl.append(cityDateDisplayDiv, tempDisplay, windDisplay, humidityDisplay, uvIndexDisplay);
+            dashboardContainerEl.removeAttribute('class');
+
             getNextFiveDayForecast(data.daily);
           }
         });
@@ -165,7 +165,7 @@ function getWeatherIcon(icon) {
 
 function contentDisplay(title, value, suffix) {
   let textDisplay = document.createElement('p');
-  textDisplay.setAttribute('class', 'cityTemperature');
+  textDisplay.setAttribute('class', 'mediumFont');
   if (title === '') {
     textDisplay.textContent = `${value}`;
   } else {

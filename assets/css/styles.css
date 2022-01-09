@@ -19,13 +19,13 @@ html * {
   font-weight: 900;
 }
 
-.cityTemperature {
+.mediumFont {
   font-size: x-large;
 }
 
 .weatherIcon {
-  width: 140;
-  height: 140;
+  width: 80px;
+  height: 80px;
 }
 
 .cityDateWeather {
@@ -82,18 +82,39 @@ input {
 .leftContainer {
   display: flex;
   flex-direction: column;
-  margin-right: 30px;
-  width: 25%;
 }
 
 .rightContainer {
   width: auto;
+  margin-left: 20px;
 }
 
 .mainContainer {
-  /* border-color: black;
-  border-width: 1px;
-  border-style: dotted; */
   display: flex;
   margin-top: 10px;
+}
+
+#dailyForecast {
+  display: flex;
+  flex-direction: row;
+
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .title {
+    text-align: center;
+  }
+  .mainContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  .leftContainer {
+    width: auto;
+  }
+
+  .rightContainer {
+    margin-top: 20px;
+    width: auto;
+  }
 }
