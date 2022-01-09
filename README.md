@@ -12,7 +12,7 @@ A website that retrieves temperature from any city
 
 ## Website
 
-https://blossomou.github.io/WeatherDasboard/
+https://blossomou.github.io/WeatherDashboard/
 
 ## Contribution
 
