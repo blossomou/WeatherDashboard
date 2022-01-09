@@ -29,12 +29,11 @@ function searchCity() {
   searchCityChoicesEl.textContent = ''; //clear old stuff out
 
   fetch(`${baseURL}/geo/1.0/direct?q=${txtInput}&limit=5&appid=${apiKey}`)
-    .then((res) => {
-      if (res.ok) {
-        choicesEl.removeAttribute('class');
-        res.json().then((data) => {
-          console.log(data);
+    .then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
           if (data.length > 0) {
+            choicesEl.removeAttribute('class');
             for (let i = 0; i < data.length; i++) {
               listOfCities.push(data[i]);
               let city = document.createElement('p');
@@ -48,6 +47,8 @@ function searchCity() {
 
               searchCityChoicesEl.appendChild(city);
             }
+          } else {
+            console.log('No result');
           }
         });
       } else {
@@ -60,15 +61,12 @@ function searchCity() {
 function storeSelectedCityToLocalStorage(cityObject) {
   var cities = JSON.parse(window.localStorage.getItem('cities')) || [];
 
-  let foundCity = cities.find((c) => c.city.name === cityObject.name && c.city.state === cityObject.state);
+  let foundCity = cities.find((city) => city.name === cityObject.name && city.state === cityObject.state);
 
   if (!foundCity) {
     // save to localstorage
-    var newCity = {
-      city: cityObject,
-      dateCreated: new Date(),
-    };
-    cities.push(newCity);
+    cityObject.dateCreated = new Date(); // add a new property
+    cities.push(cityObject);
   }
 
   window.localStorage.setItem('cities', JSON.stringify(cities));
@@ -88,7 +86,7 @@ function getCityFromLocalStorage() {
     for (let i = 0; i < getCities.length; i++) {
       let button = createElement('button', 'class', 'button');
       button.setAttribute('class', 'grayButton');
-      button.textContent = `${getCities[i].city.name}, ${getCities[i].city.state}`;
+      button.textContent = `${getCities[i].name}, ${getCities[i].state}`;
 
       button.addEventListener('click', function () {
         selectCity(getCities[i]);
@@ -105,10 +103,9 @@ function selectCity(cityObject) {
   dashboardEl.textContent = ''; //Clear out the old content
 
   fetch(`${baseURL}/data/2.5/onecall?lat=${cityObject.lat}&lon=${cityObject.lon}&limit=5&appid=${apiKey}&units=imperial`)
-    .then((res) => {
-      if (res.ok) {
-        res.json().then((data) => {
-          console.log(data);
+    .then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
           if (Object.keys(data).length > 0) {
             let today = formatUnixTimeStamp(data.current.dt);
 
