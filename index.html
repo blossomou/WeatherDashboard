@@ -10,47 +10,48 @@
 </head>
 
 <body>
-    <div>
-        <!-- banner -->
-        <div
-            style="display: flex; justify-content: center; background-image: linear-gradient(to right, lightpink , rgb(73, 2, 73));">
-            <p style="font-size: 3em; color: white; ">Weather Dashbaord</p>
-        </div>
-        <!-- big container -->
-        <div style="border-color: black; border-width: 1px; border-style: dotted; display: flex; margin-top: 10px">
-            <!-- left side -->
-            <div style="display: flex; flex-direction: column;  margin-right: 10px; width: 25%;">
-                <p style="font-size: 3em; font-weight: 900;">Search for a city: </p>
-                <input id="txtInput" type="text" placeholder="San Diego"
-                    style=" border-radius: 10px; padding: 1rem; font-size: 1.5em;"></input>
-                <button id="btnSearch"
-                    style="background-color: #5098e6; padding: 1rem; margin-top: 10px; border-radius: 10px; color: white; font-size:1.5em">Search
-                </button>
-                <div id="choices" class="hide">
-                    <p>Please select one: </p>
-                    <div id="searchChoices" style="border-color: black; border-width: 1px; border-style: dotted;">
-                    </div>
+
+    <div class="title">
+        <p>Weather Dashboard</p>
+    </div>
+
+    <div class="mainContainer">        
+        <!-- left side -->
+        <div class="leftContainer">
+            <p class="bigFont">Search for a city: </p>
+            
+            <input id="txtInput" type="text" placeholder="San Diego"></input>
+            
+            <button id="btnSearch">Search</button>
+            
+            <div id="choices" class="hide">
+                <p style="font-size: 1.5em; font-weight: 800">Please select one of the options: </p>
+                <div id="searchChoices"
+                   class="dashboardStyle">
                 </div>
-                <!-- <div id="choices" class="choices"></div> -->
-                <div style="flex-direction: row; border-style: solid; border-width: 2px; margin-top: 10px;"></div>
             </div>
-            <!-- right side -->
-            <div style="border-color: black; border-width: 1px; border-style: dotted; width: 50%">
-                <div style="border-color: black; border-width: 1px; border-style: dotted;">
-                    <div id="dashboard">
-                        <!-- <p style="font-size: 3em; font-weight: 900;">Atlanta</p>
-                        <p id="todayDate" style="font-size: 3em; font-weight: 900;">Today's Date</p> -->
-                    </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- right side -->
+        <div class="rightContainer" >
+            <div id="dashboardContainer" class="hide">
+                <div id="dashboard" class="dashboardStyle">
+                    <!-- Cleveland (01/09/2022)
+                    Temp: 41.67 °F
+                    Wind: 19.57 MPH
+                    Humidity: 92 %
+                    UV Index: 0.04-->
                 </div>
-                <div id="fiveDayForecastContainer" class="hide">
-                    <p class="cityTitle">5-Day Forecast</p>
-                    <div id="forecastContainer" style="display:flex; flex-direction: row;" >
-                      
-                    </div>
+            </div>
+            <div id="dailyForecastContainer" class="hide">
+                <p class="bigFont">5-Day Forecast:</p>
+                <div id="dailyForecast" style="display:flex; flex-direction: row;">
                 </div>
             </div>
         </div>
     </div>
+
     <script src="./assets/script.js"></script>
 </body>
 

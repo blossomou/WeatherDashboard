@@ -3,9 +3,11 @@ const apiKey = 'dc2556c07508f18009a5420cc2296743';
 
 const choicesEl = document.getElementById('choices');
 const searchCityChoicesEl = document.getElementById('searchChoices');
+
+const dashboardContainerEl = document.getElementById('dashboardContainer');
 const dashboardEl = document.getElementById('dashboard');
-const forecastContainerEl = document.getElementById('forecastContainer');
-const fiveDayForecastContainerEl = document.getElementById('fiveDayForecastContainer');
+const dailyForecastContainerEl = document.getElementById('dailyForecastContainer');
+const dailyForecastEl = document.getElementById('dailyForecast');
 
 const listOfCities = [];
 
@@ -52,6 +54,7 @@ function searchCity() {
 }
 
 function selectCity(cityObject) {
+  dashboardContainerEl.removeAttribute('class');
   dashboardEl.textContent = ''; //Clear out the old content
 
   fetch(`${baseURL}/data/2.5/onecall?lat=${cityObject.lat}&lon=${cityObject.lon}&limit=5&appid=${apiKey}&units=imperial`)
@@ -60,34 +63,26 @@ function selectCity(cityObject) {
         res.json().then((data) => {
           console.log(data);
           if (Object.keys(data).length > 0) {
-            let today = getTodayDate(0);
+            let today = formatUnixTimeStamp(data.current.dt);
 
-            let cityDateIconDiv = document.createElement('div');
-            cityDateIconDiv.setAttribute('class', 'cityDateWeather');
+            let cityDateDisplayDiv = createDivElement('class', 'cityDateWeather'); //document.createElement('div');
 
             let weatherIcon = getWeatherIcon(data.current.weather[0].icon);
 
             let cityDisplay = contentDisplay('', `${cityObject.name}`, '');
+            cityDisplay.setAttribute('class', 'bigFont');
+
             let tempDisplay = contentDisplay('Temp', `${data.current.temp}`, '°F');
             let windDisplay = contentDisplay('Wind', `${data.current.wind_speed}`, 'MPH');
             let humidityDisplay = contentDisplay('Humidity', `${data.current.humidity}`, '%');
             let uvIndexDisplay = contentDisplay('UV Index', `${data.current.uvi}`, '');
 
-            cityDisplay.setAttribute('class', 'cityTitle');
             cityDisplay.textContent += ` (${today})`;
 
-            cityDateIconDiv.appendChild(cityDisplay);
-            cityDateIconDiv.appendChild(weatherIcon);
+            cityDateDisplayDiv.append(cityDisplay, weatherIcon);
 
-            dashboardEl.appendChild(cityDateIconDiv);
-            dashboardEl.appendChild(tempDisplay);
-            dashboardEl.appendChild(windDisplay);
-            dashboardEl.appendChild(humidityDisplay);
-            dashboardEl.appendChild(uvIndexDisplay);
-
+            dashboardEl.append(cityDateDisplayDiv, tempDisplay, windDisplay, humidityDisplay, uvIndexDisplay);
             getNextFiveDayForecast(data.daily);
-
-            // alert("object is not empty");
           }
         });
       } else {
@@ -97,27 +92,20 @@ function selectCity(cityObject) {
     .catch((error) => console.log(error));
 }
 
-function getTodayDate(addNum) {
-  var today = new Date();
-  var dd = String(today.getDate() + addNum).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-  var yyyy = today.getFullYear();
-
-  today = mm + '/' + dd + '/' + yyyy;
-  return today;
+function formatUnixTimeStamp(unixTime) {
+  const date = new Date(unixTime * 1000);
+  return date.toLocaleDateString('en-US');
 }
 
 function getNextFiveDayForecast(listOfDailyObject) {
-  let listOfDailyObj = listOfDailyObject.slice(0, 5);
-
-  fiveDayForecastContainerEl.removeAttribute('class');
-  forecastContainerEl.textContent = ''; //Clear out the old content
+  let listOfDailyObj = listOfDailyObject.slice(1, 6); //Get the next friday and exclude today's
+  dailyForecastContainerEl.removeAttribute('class');
+  dailyForecastEl.textContent = ''; //Clear out the old content
 
   for (let i = 0; i < listOfDailyObj.length; i++) {
-    let cityDateIconDiv = document.createElement('div');
-    cityDateIconDiv.setAttribute('class', 'forecast');
+    let individualDayDiv = createDivElement('class', 'forecastDiv');
 
-    let forecastDate = getTodayDate(i + 1);
+    let forecastDate = formatUnixTimeStamp(listOfDailyObj[i].dt);
 
     let weatherIconDisplay = getWeatherIcon(listOfDailyObj[i].weather[0].icon);
     let dateDisplay = contentDisplay('', `${forecastDate}`, '');
@@ -125,15 +113,9 @@ function getNextFiveDayForecast(listOfDailyObject) {
     let windDisplay = contentDisplay('Wind', `${listOfDailyObj[i].wind_speed}`, 'MPH');
     let humidityDisplay = contentDisplay('Humidity', `${listOfDailyObj[i].humidity}`, '%');
 
-    cityDateIconDiv.appendChild(dateDisplay);
-    cityDateIconDiv.appendChild(weatherIconDisplay);
+    individualDayDiv.append(dateDisplay, weatherIconDisplay, tempDisplay, windDisplay, humidityDisplay);
 
-    cityDateIconDiv.appendChild(tempDisplay);
-    cityDateIconDiv.appendChild(windDisplay);
-    cityDateIconDiv.appendChild(humidityDisplay);
-
-    forecastContainerEl.appendChild(cityDateIconDiv);
-    //console.log(newlistOfDailyObject);
+    dailyForecastEl.appendChild(individualDayDiv);
   }
 }
 
@@ -155,4 +137,11 @@ function contentDisplay(title, value, suffix) {
   }
 
   return textDisplay;
+}
+
+function createDivElement(name, style) {
+  let createDiv = document.createElement('div');
+  createDiv.setAttribute(name, style);
+
+  return createDiv;
 }
